@@ -2,7 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import PieceSelector from "./PieceSelector";
 import SolverSteps from "./SolverSteps";
 import {
-  findSolution,
+  solve,
   type Grid,
   type Piece,
   type SolutionStep,
@@ -47,7 +47,7 @@ export default function GameGrid({ initialGrid }: Props) {
   const handleSolve = () => {
     setError(null);
     try {
-      const steps = findSolution(grid, pieces);
+      const steps = solve(grid, pieces);
       if (!steps || steps.length === 0) {
         setError("I'm not sure how to solve this one yet, sorry!");
         setSolution([]);
