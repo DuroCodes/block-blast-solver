@@ -110,12 +110,12 @@ export default function GameGrid({ initialGrid }: Props) {
       <div className="space-y-8">
         {solution.length === 0 ? (
           <>
-            <div className="p-4 bg-container-bg rounded-2xl shadow-lg w-fit mx-auto">
-              <div className="grid grid-cols-8 gap-[1px] bg-gray-800/50 p-[1px] rounded-lg">
+            <div className="p-2 md:p-4 bg-container-bg rounded-2xl shadow-lg w-fit mx-auto">
+              <div className="grid grid-cols-8 bg-gray-800/50 p-[0.5px] gap-[1px] md:p-[1px] rounded-lg">
                 {grid.map((filled, index) => (
                   <button
                     key={index}
-                    className={`w-12 h-12 rounded-sm ${
+                    className={`w-9 h-9 md:w-12 md:h-12 rounded-sm ${
                       filled ? "bg-cell-filled" : "bg-cell-bg"
                     } hover:brightness-110 transition-all`}
                     onMouseDown={() => handleMouseDown(index)}
@@ -124,7 +124,8 @@ export default function GameGrid({ initialGrid }: Props) {
                 ))}
               </div>
             </div>
-            <div className="flex gap-4 justify-center">
+
+            <div className="flex gap-2 md:gap-4 justify-center">
               <PieceSelector
                 key={`piece-${solution.length}-0`}
                 id={0}

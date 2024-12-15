@@ -45,12 +45,12 @@ export default function PieceSelector({ id, onChange }: Props) {
   }, []);
 
   return (
-    <div className="p-3 bg-container-bg rounded-xl shadow-lg">
-      <div className="grid grid-cols-5 gap-0.5 bg-gray-800/50 p-1 rounded-lg">
+    <div className="p-2 md:p-3 bg-container-bg rounded-xl shadow-lg">
+      <div className="grid grid-cols-5 gap-[1px] bg-gray-800/50 p-[0.5px] md:gap-0.5 md:p-1 rounded-lg">
         {grid.map((filled, index) => (
           <button
             key={index}
-            className={`w-6 h-6 rounded-sm ${
+            className={`w-5 h-5 md:w-6 md:h-6 rounded-sm ${
               filled ? "bg-cell-filled" : "bg-cell-bg"
             } hover:brightness-110 transition-all`}
             onMouseDown={() => handleMouseDown(index)}
