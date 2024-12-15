@@ -110,7 +110,7 @@ export default function GameGrid({ initialGrid }: Props) {
       <div className="space-y-8">
         {solution.length === 0 ? (
           <>
-            <div className="p-2 md:p-4 bg-container-bg rounded-2xl shadow-lg w-fit mx-auto">
+            <div className="p-2 md:p-4 bg-container-bg rounded-2xl w-fit mx-auto">
               <div className="grid grid-cols-8 bg-gray-800/50 p-[0.5px] gap-[1px] md:p-[1px] rounded-lg">
                 {grid.map((filled, index) => (
                   <button
@@ -152,7 +152,6 @@ export default function GameGrid({ initialGrid }: Props) {
             </div>
           </>
         ) : (
-          // Solution mode
           <>
             <SolverSteps steps={solution} pieces={pieces} />
             <div className="flex justify-center gap-4">

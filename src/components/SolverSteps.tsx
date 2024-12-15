@@ -14,7 +14,7 @@ const StepGrid = ({
   step: SolutionStep;
   pieces: Piece[];
 }) => (
-  <div className="p-4 bg-container-bg rounded-2xl shadow-lg w-fit">
+  <div className="p-4 bg-container-bg rounded-2xl w-fit">
     <div className="grid grid-cols-8 gap-[1px] bg-gray-800/50 p-[1px] rounded-lg">
       {step.intermediateGrid.map((filled, i) => {
         const x = (i % GRID_SIZE) - step.position[0];

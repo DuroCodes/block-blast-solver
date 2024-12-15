@@ -45,7 +45,7 @@ export default function PieceSelector({ id, onChange }: Props) {
   }, []);
 
   return (
-    <div className="p-2 md:p-3 bg-container-bg rounded-xl shadow-lg">
+    <div className="p-2 md:p-3 bg-container-bg rounded-xl">
       <div className="grid grid-cols-5 gap-[1px] bg-gray-800/50 p-[0.5px] md:gap-0.5 md:p-1 rounded-lg">
         {grid.map((filled, index) => (
           <button
