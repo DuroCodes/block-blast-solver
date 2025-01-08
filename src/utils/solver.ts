@@ -128,16 +128,12 @@ const findPotentialLines = (grid: Grid) => {
 
   for (let y = 0; y < GRID_SIZE; y++) {
     const missing = countMissingInLine(grid, y, true);
-    if (missing > 0 && missing <= 5) {
-      rows.push({ index: y, missing });
-    }
+    if (missing > 0 && missing <= 5) rows.push({ index: y, missing });
   }
 
   for (let x = 0; x < GRID_SIZE; x++) {
     const missing = countMissingInLine(grid, x, false);
-    if (missing > 0 && missing <= 5) {
-      cols.push({ index: x, missing });
-    }
+    if (missing > 0 && missing <= 5) cols.push({ index: x, missing });
   }
 
   return { rows, cols };
@@ -204,9 +200,7 @@ const findAllValidPlacements = (grid: Grid, piece: Piece) => {
   for (let y = 0; y < GRID_SIZE; y++) {
     for (let x = 0; x < GRID_SIZE; x++) {
       const step = tryPlacement(grid, piece, [x, y]);
-      if (step) {
-        placements.push(step);
-      }
+      if (step) placements.push(step);
     }
   }
 
@@ -222,7 +216,36 @@ const permutations = <T>(items: T[]): T[][] =>
         ),
       );
 
-export const solve = (initialGrid: Grid, pieces: Piece[]): SolutionStep[] => {
+const tryWithPieces = (
+  currentGrid: Grid,
+  remainingPieces: Piece[],
+): SolutionStep[] | null => {
+  if (remainingPieces.length === 0) return [];
+
+  const currentPiece = remainingPieces[0];
+  const placements = findAllValidPlacements(currentGrid, currentPiece);
+
+  placements.sort((a, b) => b.score - a.score);
+
+  for (const placement of placements) {
+    const nextGrid = hasLineClears(placement.intermediateGrid)
+      ? placement.resultingGrid
+      : placement.intermediateGrid;
+
+    const remainingSolution = tryWithPieces(nextGrid, remainingPieces.slice(1));
+
+    if (remainingSolution !== null) {
+      return [placement, ...remainingSolution];
+    }
+  }
+
+  return null;
+};
+
+export const solve = (
+  initialGrid: Grid,
+  pieces: Piece[],
+): SolutionStep[] | null => {
   if (pieces.length === 0) return [];
   if (hasLineClears(initialGrid)) {
     const clears = calculateClears(initialGrid);
@@ -230,50 +253,20 @@ export const solve = (initialGrid: Grid, pieces: Piece[]): SolutionStep[] => {
     return solve(clearedGrid, pieces);
   }
 
-  const tryWithPieces = (
-    currentGrid: Grid,
-    remainingPieces: Piece[],
-  ): SolutionStep[] | null => {
-    if (remainingPieces.length === 0) return [];
-
-    const currentPiece = remainingPieces[0];
-    const placements = findAllValidPlacements(currentGrid, currentPiece);
-
-    placements.sort((a, b) => b.score - a.score);
-
-    for (const placement of placements) {
-      const nextGrid = hasLineClears(placement.intermediateGrid)
-        ? placement.resultingGrid
-        : placement.intermediateGrid;
-
-      const remainingSolution = tryWithPieces(
-        nextGrid,
-        remainingPieces.slice(1),
-      );
-
-      if (remainingSolution !== null) {
-        return [placement, ...remainingSolution];
-      }
-    }
-
-    return null;
-  };
-
-  const piecePermutations = permutations(pieces);
   let bestSolution: SolutionStep[] | null = null;
   let bestScore = -1;
 
+  const piecePermutations = permutations(pieces);
+
   for (const piecePerm of piecePermutations) {
     const solution = tryWithPieces(initialGrid, piecePerm);
-    if (solution) {
-      const totalScore = solution.reduce((sum, step) => sum + step.score, 0);
-      if (totalScore > bestScore) {
-        bestScore = totalScore;
-        bestSolution = solution;
-      }
+    if (!solution) continue;
+    const totalScore = solution.reduce((sum, step) => sum + step.score, 0);
+    if (totalScore > bestScore) {
+      bestScore = totalScore;
+      bestSolution = solution;
     }
   }
 
-  if (!bestSolution) throw new Error("No solution found");
   return bestSolution;
 };
